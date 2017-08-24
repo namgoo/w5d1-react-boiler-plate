@@ -12,12 +12,13 @@ class Chatbar extends React.Component {
     }
 
     postMessage(event) { if (event.key === "Enter") {
-      this.props.postMessage(event.target.value)
-      this.setState({value: ""})
-    } else {
-      console.log(event.target.value)
-      this.setState({value: event.target.value})
-    }}
+        this.props.postMessage(event.target.value)
+        this.setState({value: ""})
+      } else {
+        console.log(event.target.value)
+        this.setState({value: event.target.value})
+      }
+    }
 
     render () {
       console.log("Rendering <Chatbar/>")

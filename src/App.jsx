@@ -3,6 +3,7 @@ import Chatbar from './Chatbar.jsx';
 import Message from './Message.jsx';
 import MessageList from './MessageList.jsx'
 
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -23,10 +24,12 @@ class App extends Component {
       }
   }
 
+
   postMessage(content) {
     const newMessage = {username: this.state.currentUser.name, content: content};
     const messages = this.state.messages.concat(newMessage)
-    this.setState({messages: messages})
+    this.setState({messages: messages});
+    this.socket.send(JSON.stringify(newMessage))
   }
 
 
@@ -40,9 +43,15 @@ class App extends Component {
       // Update the state of the app component.
       // Calling setState will trigger a call to render() in App and all child components.
       this.setState({messages: messages})
+      // this.socket.send("Here's some text that the server is urgently awaiting!")
     }, 3000);
+
+      this.socket = new WebSocket("ws://localhost:3001") ;
+
   }
+
       render() {
+
     console.log("Rendering <App/>")
     console.log("messages", this.state.messages)
     return (
