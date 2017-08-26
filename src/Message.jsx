@@ -19,13 +19,21 @@ import React, {Component} from 'react';
 
 
 
-let Message = (props) =>
-            <div className="message">
+let Message = (props) => {
+  if(props.eachMessage.type === 'incomingMessage') {
+    return (<div className="message">
 
               <span  className="message-username"> {props.eachMessage.username} </span>
               <span  className="message-content">  {props.eachMessage.content} </span>
 
-            </div>
+            </div>);
+  } else {
+    return (<div className="message system">
+            <span>  {props.eachMessage.content} </span>
+        </div>)
+  }
+
+}
 
 
 
