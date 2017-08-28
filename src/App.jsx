@@ -14,15 +14,17 @@ class App extends Component {
   }
 
 
-  postMessage(content) {
+  postMessage = (content) => {
     const newMessage = {type: "postMessage", username: this.state.currentUser.name, content: content};
     const messages = this.state.messages.concat(newMessage)
     // this.setState({messages: messages});
     this.socket.send(JSON.stringify(newMessage))
   }
 
-  changeName(oldName, newName) {
-    const nameChange = {type: "postNotification", content: `${oldName} has changed their name to ${newName}`}
+  changeName = (newName) => {
+    let oldName = this.state.currentUser.name
+    const nameChange = {type: "postNotification", content: `${oldName}
+    has changed their name to ${newName}`}
     console.log('nameChange: ', nameChange)
     this.setState({currentUser: {name: newName}})
     this.socket.send(JSON.stringify(nameChange))
@@ -33,7 +35,8 @@ class App extends Component {
     setTimeout(() => {
       console.log("Simulating incoming messages");
       // Add a new message to the list of messages in the data store
-      const newMessage = {type: "postMessage", id: 3, username: "Michelle", content: "Hello there!"};
+      const newMessage = {type: "incomingMessage", id: 3,
+      username: "Michelle", content: "Hello there!"};
       const messages = this.state.messages.concat(newMessage)
       // Update the state of the app component.
       // Calling setState will trigger a call to render() in App and all child components.
@@ -41,9 +44,9 @@ class App extends Component {
       // this.socket.send("Here's some text that the server is urgently awaiting!")
     }, 3000);
 
-      this.socket = new WebSocket("ws://localhost:3001") ;
-      this.socket.onmessage = (event) => {
-        console.log('Receiving from the server', JSON.parse(event.data));
+    this.socket = new WebSocket("ws://localhost:3001") ;
+    this.socket.onmessage = (event) => {
+      console.log('Receiving from the server', JSON.parse(event.data));
         //    Notifications -------------------------------------------------
       const data = JSON.parse(event.data);
         switch(data.type) {
@@ -64,22 +67,27 @@ class App extends Component {
       }
   }}
 
-      render() {
+    render() {
 
-    console.log("Rendering <App/>")
-    console.log("messages", this.state.messages)
-    return (
-    <div>
-      <nav className="navbar">
-        <a href="/" className="navbar-brand">Chatty </a>
-        <a className="navbar-numOfUsers"> {this.state.userCount} Users </a>
-      </nav>
+      console.log("Rendering <App/>")
+      console.log("messages", this.state.messages)
+      return (
+        <div>
+          <nav className="navbar">
+            <a href="/" className="navbar-brand">Chatty </a>
+            <a className="navbar-numOfUsers"> {this.state.userCount} Users </a>
+          </nav>
 
-      <MessageList messages={this.state.messages}/>
+          <MessageList messages={this.state.messages}/>
 
-      <Chatbar currentUser={this.state.currentUser} postMessage={this.postMessage.bind(this)} changeName={this.changeName.bind(this)} />
+          <Chatbar
+            currentUser={this.state.currentUser}
+            // postMessage={this.postMessage.bind(this)}
+            postMessage={this.postMessage}
+            changeName={this.changeName}
+          />
 
-    </div>
+        </div>
 
     );
   }
@@ -89,7 +97,6 @@ class App extends Component {
 
 
 export default App;
-
 
 
 
